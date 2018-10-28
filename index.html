@@ -10,7 +10,11 @@
 
       $.getJSON('https://api.github.com/user/' + id + "?callback=?", 
        function(json){
+        console.log(json)
+        
          var github_user_url = json["html_url"]
+         console.log(github_user_url)
+
          window.location.replace(github_user_url)
          return false
       });
