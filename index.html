@@ -1,38 +1,26 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Redirect GitHub ID to Username</title>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-    <script type="text/javascript" charset="utf-8">
-
-    function get_github_name_for (id) {
-
-      $.getJSON('https://api.github.com/user/' + id + "?callback=?", 
-       function(json){
-        console.log(json)
-        
-         var github_user_url = json["html_url"]
-         console.log(github_user_url)
-
-         window.location.replace(github_user_url)
-         return false
-      });
-    }
-
-
-    $(document).ready(function() {
-
-      if (document.location.hash) {
-        // $('form p').show()
-        var id = document.location.hash.match(/^#(.*?)$/)[1]
-        get_github_name_for(id)
-      }
-
-    });
-    </script>
-
-  </head>
-  <body>
-  </body>
+<head>
+	<title>Redirect GitHub ID to Username</title>
+	<meta charset="utf-8">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+	<script type="text/javascript" charset="utf-8">
+		function get_github_name_for(id) {
+			$.getJSON('https://api.github.com/user/' + id + "?callback=?", 
+			function(json){
+				var github_user_url = json["data"]["html_url"]
+				window.location.replace(github_user_url)
+				return false
+			});
+		}
+		$(document).ready(function() {
+			if (document.location.hash) {
+				var id = document.location.hash.match(/^#(.*?)$/)[1]
+				get_github_name_for(id)
+			}
+		});
+	</script>
+	</head>
+<body>
+</body>
 </html>
