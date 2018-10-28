@@ -1,131 +1,34 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
   <head>
-    <title>Find your github user id</title>
+    <title>Redirect GitHub ID to Username</title>
 
-    <style type="text/css" media="screen">
-      body {
-        font-size: 200%;
-        text-align: center;
-        margin: auto 0;
-        margin-top: 5em;
-        font-family: Courier, monospace;
-      }
-
-      label {
-        display: block;
-      }
-
-      input[type=text] {
-        font-size: 80%;
-      }
-
-      #success,
-      form p {
-        display: none;
-      }
-
-      #footer {
-        margin-top: 5em;
-        font-size: 50%;
-        color: #555;
-      }
-
-      #footer a {
-        color: #555;
-        text-decoration: none;
-        border-bottom: 1px dotted;
-      }
-    </style>
-
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
     <script type="text/javascript" charset="utf-8">
 
-    function get_github_id_for (username, callback) {
+    function get_github_name_for (id) {
 
-      $.getJSON('https://api.github.com/users/' + username + "?callback=?", {},
+      $.getJSON('https://api.github.com/user/' + id + "?callback=?", 
        function(json){
-         var id = json["data"]["id"]
-         if (id) {
-           callback(username, id)
-         }
+         var github_user_url = json["html_url"]
+         window.location.replace(github_user_url)
          return false
       });
     }
 
-    function add_twitter_link_for (username, id) {
-      var tweet = $('<a>').text("Tweet this").attr('href', "https://twitter.com?status=" + encodeURIComponent("Found out I'm GitHub user " + id + " by using http://caius.github.com/github_id/#" + username + " #GitHub_id")).insertAfter("#success h1")
-    }
-
-    function show_user (username, id) {
-      $('#username').text(username)
-      $('#id').text(id)
-      $('form').hide()
-      $('#success').show()
-    }
 
     $(document).ready(function() {
 
       if (document.location.hash) {
         // $('form p').show()
-        var name = document.location.hash.match(/^#(.*?)$/)[1]
-        get_github_id_for(name, function(username, id) {
-          show_user(username, id)
-          // $('form p').hide()
-          $('form h1').hide()
-          $('form').show()
-        })
+        var id = document.location.hash.match(/^#(.*?)$/)[1]
+        get_github_name_for(id)
       }
-
-      $('form').submit(function(event) {
-        event.preventDefault()
-
-        $('form p').show()
-        var name = $("#github_username").val()
-
-        get_github_id_for(name, function(username, id) {
-          add_twitter_link_for(username, id)
-          show_user(username, id)
-          document.location.hash = "#" + username
-        })
-
-        return false
-      });
 
     });
     </script>
 
-
-    <script type="text/javascript">
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-3041721-6']);
-      _gaq.push(['_trackPageview']);
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
-    </script>
   </head>
   <body>
-
-    <div id="success">
-      <h1><span id="username"></span> is github user #<span id="id"></span></h1>
-    </div>
-
-    <form id="input" action="#" accept-charset="utf-8">
-      <h1>Find Github User ID</h1>
-      <input type="text" name="github_username" id="github_username" placeholder="Github Username" />
-
-      <br />
-      <input type="submit" value="Find id &rarr;" />
-      <p>Finding&hellip;</p>
-    </form>
-
-
-    <div id="footer">
-      <p>A hack born out of idle curiosity by GitHub user #696: <a href="http://caius.name/">Caius Durling</a></p>
-    </div>
   </body>
 </html>
